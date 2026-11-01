@@ -1,7 +1,5 @@
 # CSE 340 Service Network
 
-W01 Initial Site Creation, following the [v2 assignment](https://byui-cse.github.io/cse340-ww-course-v2/week01/assignment.html).
-
 Live site: <https://hate-uchiha-cse340.onrender.com>
 
 Repository: <https://github.com/Proffvintage/cse340>
