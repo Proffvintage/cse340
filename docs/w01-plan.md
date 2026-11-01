@@ -17,8 +17,8 @@ The full vehicle storefront is the separate Assignment 1. This learning activity
 | 5 | Install dependencies, configure EJS and layouts | Complete; pnpm installation and frozen-lockfile install pass. |
 | 6 | Build partials, index route and named heading | Complete with `Hate-Uchiha`; rendered HTML checks pass. |
 | 7 | Test locally | Seven HTTP checks pass in development (5500) and production mode (10000); browser review pending. |
-| 8 | Publish the app to the learner's GitHub repository | Pending authentication and repository setup. |
-| 9 | Create Render account linked to GitHub | Learner is creating the account. |
+| 8 | Publish the app to the learner's GitHub repository | Complete: [Proffvintage/cse340](https://github.com/Proffvintage/cse340), `main` branch. |
+| 9 | Create Render account linked to GitHub | Account creation confirmed by learner; CLI connection in progress. |
 | 10 | Create a free PostgreSQL service | Pending; database/user `cse340`, Frankfurt region. |
 | 11 | Create free Node web service in the same region | Pending; settings in `render-setup.md`. |
 | 12 | Deploy updates and test the public app | Pending live Render URL; run `pnpm verify -- https://YOUR-SERVICE.onrender.com` and review in a browser. |

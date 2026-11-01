@@ -15,7 +15,7 @@ Date: 2026-11-01.
 
 ## Hosted
 
-- GitHub repository URL: pending.
+- GitHub repository URL: https://github.com/Proffvintage/cse340; initial implementation pushed to `main`.
 - Render web service URL: pending.
 - Render database status and region: pending.
 - Deployed commit: pending.
