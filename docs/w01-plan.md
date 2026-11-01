@@ -11,16 +11,16 @@ The full vehicle storefront is the separate Assignment 1. This learning activity
 | Step | Work | Status |
 | --- | --- | --- |
 | 1 | Check Node, Git, pnpm and VS Code; install course extensions | Complete: Node 22.23.2, Git 2.43.0, pnpm 10.20.0 and VS Code available; all six recommended course extensions installed. |
-| 2 | Watch request/response preparation material and review Node references | Learner review remains to be confirmed. |
+| 2 | Watch request/response preparation material and review Node references | Complete; learner confirmed review on 2026-11-01. |
 | 3 | Build/test the simple Express application | Complete in sibling `../cse340-sample`; GET `/` returns `Welcome home!` (200), missing route returns 404. |
 | 4 | Import/review official starter | Imported [340-starter](https://github.com/byui-wdd/340-starter) at `b0fa1e2b56516f1bee736a6786257ff0fbb624b6`; four placeholder files removed. |
 | 5 | Install dependencies, configure EJS and layouts | Complete; pnpm installation and frozen-lockfile install pass. |
 | 6 | Build partials, index route and named heading | Complete with `Hate-Uchiha`; rendered HTML checks pass. |
-| 7 | Test locally | Seven HTTP checks pass in development (5500) and production mode (10000); browser review pending. |
+| 7 | Test locally | Complete: seven HTTP checks pass in development (5500) and production mode (10000); desktop/mobile browser screenshots inspected. |
 | 8 | Publish the app to the learner's GitHub repository | Complete: [Proffvintage/cse340](https://github.com/Proffvintage/cse340), `main` branch. |
-| 9 | Create Render account linked to GitHub | Account creation confirmed by learner; CLI connection in progress. |
-| 10 | Create a free PostgreSQL service | Pending; database/user `cse340`, Frankfurt region. |
-| 11 | Create free Node web service in the same region | Pending; settings in `render-setup.md`. |
+| 9 | Create Render account linked to GitHub | Complete; learner confirmed account creation and authorized the CLI. |
+| 10 | Create a free PostgreSQL service | Complete: `cse340-db` is Available on the free plan in Frankfurt; database `cse340_0kyc`, user `cse340`; expires 2026-12-01. |
+| 11 | Create free Node web service in the same region | Created [hate-uchiha-cse340](https://hate-uchiha-cse340.onrender.com), free Node service in Frankfurt with manual deployment. |
 | 12 | Deploy updates and test the public app | Pending live Render URL; run `pnpm verify -- https://YOUR-SERVICE.onrender.com` and review in a browser. |
 
 ## File responsibilities and request flow

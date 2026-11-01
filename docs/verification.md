@@ -11,15 +11,17 @@ Date: 2026-11-01.
 - Production start: PASS; `NODE_ENV=production PORT=10000 HOST=0.0.0.0 pnpm start` honors the supplied port and binding; all seven checks pass using `pnpm verify -- http://localhost:10000`.
 - Git exclusion: PASS; `.env` and `node_modules` are ignored.
 - VS Code course extensions: installed and confirmed with `code --list-extensions` (Prettier, EJS, File Utils, SQLTools, PostgreSQL driver, JavaScript snippets).
-- Browser review: pending.
+- Local browser review: PASS; [desktop](evidence/local-desktop.png) (1200 × 800) and [mobile](evidence/local-mobile.png) (390 × 844) screenshots inspected, with heading, header, navigation and footer visible.
 
 ## Hosted
 
 - GitHub repository URL: https://github.com/Proffvintage/cse340; initial implementation pushed to `main`.
-- Render web service URL: pending.
-- Render database status and region: pending.
-- Deployed commit: pending.
-- Post-deployment HTTP checks: pending.
+- Render web service URL: https://hate-uchiha-cse340.onrender.com; service created on the free plan in Frankfurt.
+- Render database: `cse340-db` (`dpg-dbjn1sajnfac738gb100-a`), Available on the free plan in Frankfurt; PostgreSQL 18, database `cse340_0kyc`, user `cse340`; expires 2026-12-01.
+- PostgreSQL connection: PASS; read-only `SELECT 1` returned 1 over certificate-verified TLS after allowing the current development public IP.
+- Final deployed commit: pending manual update deployment.
+- First deployment: Live, commit `76779e95ee260a6895c2c930b17fca449602c32c`; all seven HTTP checks pass at the public URL.
+- Manual update deployment and repeat HTTP checks: pending.
 - Post-deployment browser review: pending.
 
 Question 1 is not yet complete.

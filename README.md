@@ -1,5 +1,7 @@
 # CSE 340 — W01 learning activities
 
+Live application: <https://hate-uchiha-cse340.onrender.com>
+
 Express and EJS application based on the [official course starter](https://github.com/byui-wdd/340-starter). The home page displays Hate-Uchiha through a layout and four shared partials.
 
 ## Run locally

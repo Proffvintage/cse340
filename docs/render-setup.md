@@ -24,6 +24,8 @@ Wait for Available. The course states the free database expires after 30 days; r
 
 Copy the Internal Database URL directly into the web service's `DATABASE_URL`. Do not commit the URL to Git.
 
+Created for this project: `cse340-db`, ID `dpg-dbjn1sajnfac738gb100-a`, PostgreSQL 18 in Frankfurt. Render assigned database name `cse340_0kyc` and user `cse340`. The free database expires on 2026-12-01.
+
 ## Node web service
 
 Choose **New → Web Service**, connect the GitHub repository:
@@ -65,3 +67,5 @@ Render supplies `PORT`; let Render choose it. The local `.env` is not deployed.
 Verification checks rendered HTML, CSS, JavaScript, image delivery, a missing route, and exclusion of `.env` and server source from static serving. Account features come later.
 
 Record repository URL, public URL, deployed commit and results in `verification.md`. Local success does not prove deployment success.
+
+External database access is configured for the current development public IP only. Update the database Networking allowlist if your public IP changes. Same-region Render services use the Internal Database URL.
