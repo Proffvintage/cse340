@@ -1,51 +1,77 @@
-const assert = require("node:assert/strict")
-const path = require("node:path")
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") })
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import ejs from 'ejs';
 
-const base = new URL(process.argv.slice(2).find((argument) => argument !== "--") || "http://localhost:5500")
-const studentName = process.env.STUDENT_NAME || "Hate-Uchiha"
-const escapeHtml = (value) => value.replace(/[&<>"']/g, (character) => ({
-  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&#34;", "'": "&#39;",
-})[character])
+const projectDirectory = fileURLToPath(new URL('../', import.meta.url));
+const verifySite = async () => {
+  const baseUrl = new URL(process.argv.slice(2).find((argument) => argument !== '--') || `http://127.0.0.1:${process.env.PORT || 3000}`);
+  const pageSpecs = [
+    { path: '/', title: 'Home', content: ['Welcome to the', 'CSE 340', 'Service Network!'] },
+    { path: '/organizations', title: 'Our Partner Organizations', content: ['BrightFuture Builders', 'GreenHarvest Growers', 'UnityServe Volunteers', 'info@brightfuture.org', 'contact@greenharvest.org', 'hello@unityserve.org'] },
+    { path: '/projects', title: 'Service Projects', content: ['Park Cleanup', 'Food Drive', 'Community Tutoring', 'Join us to clean up local parks and make them beautiful!', 'Help collect and distribute food to those in need.', 'Volunteer to tutor students in various subjects.'] },
+    { path: '/categories', title: 'Service Project Categories', content: ['Environmental', 'Educational', 'Community Service', 'Health and Wellness'] },
+  ];
+  const renderedPages = new Map();
+  const imagePaths = new Set();
+  const request = async (resource, status, contentType) => {
+    const response = await fetch(new URL(resource, baseUrl), { signal: AbortSignal.timeout(60000) });
+    assert.equal(response.status, status, `${resource}: HTTP status`);
+    if (contentType) assert.match(response.headers.get('content-type') || '', contentType, `${resource}: content type`);
+    return response;
+  };
 
-async function check(resource, status, contentType) {
-  const response = await fetch(new URL(resource, base), {
-    signal: AbortSignal.timeout(60000),
-  })
-  assert.equal(response.status, status, `${resource}: HTTP status`)
-  if (contentType) {
-    assert.match(response.headers.get("content-type") || "", contentType)
+  for (const spec of pageSpecs) {
+    const response = await request(spec.path, 200, /text\/html/);
+    const html = await response.text();
+    renderedPages.set(spec.path, html);
+    assert.ok(html.includes(`<title>${spec.title} | CSE 340 Service Network</title>`), `${spec.path}: EJS page title`);
+    assert.match(html, /<h1[^>]*>/, `${spec.path}: page heading`);
+    assert.ok(html.includes('class="site-header"') && html.includes('class="site-footer"'), `${spec.path}: shared partials`);
+    assert.ok(html.includes(`${new Date().getFullYear()} CSE 340 Service Network.`), `${spec.path}: copyright`);
+    assert.ok(html.includes('href="/css/main.css"'), `${spec.path}: stylesheet`);
+    const mainNavigation = html.match(/<nav aria-label="Main navigation">([\s\S]*?)<\/nav>/)?.[1] || '';
+    for (const target of pageSpecs) assert.ok(mainNavigation.includes(`href="${target.path}"`), `${spec.path}: link to ${target.path}`);
+    assert.equal((mainNavigation.match(/aria-current="page"/g) || []).length, 1, `${spec.path}: one active navigation link`);
+    for (const expected of spec.content) assert.ok(html.includes(expected), `${spec.path}: ${expected}`);
+    assert.ok(!html.includes('<%'), `${spec.path}: all EJS rendered`);
+    for (const image of html.matchAll(/<img[^>]+src="([^"<>]+)"/g)) imagePaths.add(image[1]);
+    console.log(`PASS ${spec.path}: content, title, navigation, shared partials`);
   }
-  return response
-}
 
-async function main() {
-  const home = await check("/", 200, /text\/html/)
-  const html = await home.text()
-  assert.ok(html.includes("<title>Home | CSE Motors</title>"), "Rendered title")
-  assert.ok(html.includes(`<h1>${escapeHtml(studentName)}</h1>`), "Student heading")
-  assert.ok(html.includes('id="top-header"'), "Header partial")
-  assert.ok(html.includes('<nav aria-label="Main navigation">'), "Navigation partial")
-  assert.ok(html.includes(`${new Date().getFullYear()}, CSE 340 App`), "Footer year")
-  assert.ok(!html.includes("<%"), "EJS tags must be rendered")
-  console.log("PASS home: rendered title, heading, layout, partials, and year")
-
-  const stylesheet = await check("/css/styles.css", 200, /text\/css/)
-  assert.ok((await stylesheet.text()).trim().length > 0, "Stylesheet has content")
-  console.log("PASS stylesheet")
-  await check("/js/script.js", 200, /javascript/)
-  console.log("PASS static JavaScript")
-  const favicon = await check("/images/site/favicon-32x32.png", 200, /image\/png/)
-  assert.ok((await favicon.arrayBuffer()).byteLength > 0, "Favicon has content")
-  console.log("PASS favicon")
-  for (const resource of ["/missing-w01-page", "/.env", "/server.js"]) {
-    await check(resource, 404)
-    console.log(`PASS ${resource}: 404`)
+  for (const [source, html] of renderedPages) {
+    for (const link of html.matchAll(/href="([^"<>]+)"/g)) {
+      if (!link[1].startsWith('/') && !link[1].startsWith('#')) continue;
+      const url = new URL(link[1], new URL(source, baseUrl));
+      if (url.pathname.startsWith('/css/') || url.pathname.startsWith('/images/')) continue;
+      assert.ok(renderedPages.has(url.pathname), `${source}: valid internal route ${url.pathname}`);
+      if (url.hash) assert.ok(renderedPages.get(url.pathname).includes(`id="${url.hash.slice(1)}"`), `${source}: valid anchor ${url.hash}`);
+    }
   }
-  console.log(`All 7 HTTP checks passed for ${base.origin}`)
-}
+  const css = await request('/css/main.css', 200, /text\/css/);
+  assert.ok((await css.text()).length > 100, 'Stylesheet has content');
+  for (const imagePath of imagePaths) {
+    const image = await request(imagePath, 200, /image\/png/);
+    assert.ok((await image.arrayBuffer()).byteLength > 0, `${imagePath}: image bytes`);
+  }
+  await request('/images/favicon.svg', 200, /image\/svg\+xml/);
+  console.log(`PASS stylesheet, ${imagePaths.size} PNG images, and favicon`);
+  for (const resource of ['/.env', '/server.js', '/src/views/home.ejs', '/missing-page']) await request(resource, 404);
+  console.log('PASS missing route and private/source file exclusion');
 
-main().catch((error) => {
-  console.error(`Verification failed: ${error.message}`)
-  process.exitCode = 1
-})
+  const unsafeTitle = '<script>alert("title")</script>';
+  const header = await ejs.renderFile(path.join(projectDirectory, 'src/views/partials/header.ejs'), {
+    title: unsafeTitle,
+    currentPath: '/',
+    navigation: pageSpecs.map((spec) => ({ label: spec.title, href: spec.path })),
+  });
+  assert.ok(!header.includes(unsafeTitle) && header.includes('&lt;script&gt;'), 'Header escapes title data');
+  console.log(`All checks passed for ${baseUrl.origin}; EJS title escaping verified`);
+};
+
+try {
+  await verifySite();
+} catch (error) {
+  console.error(`Verification failed: ${error.message}`);
+  process.exitCode = 1;
+}

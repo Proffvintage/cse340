@@ -1,48 +1,42 @@
-/* ******************************************
- * This server.js file is the primary file of the
- * application. It is used to control the project.
- *******************************************/
-/* ***********************
- * Require Statements
- *************************/
-const express = require("express")
-const path = require("node:path")
-require("dotenv").config({ path: path.join(__dirname, ".env") })
-const expressLayouts = require("express-ejs-layouts")
-const app = express()
-const static = require("./routes/static")
+import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { once } from 'node:events';
+import { navigation, organizations, projects, categories } from './src/data/site.js';
 
-/* ***********************
- * View Engine and Templates
- *************************/
-app.set("views", path.join(__dirname, "views"))
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout")
+const projectDirectory = fileURLToPath(new URL('.', import.meta.url));
+const nodeEnvironment = process.env.NODE_ENV?.toLowerCase() || 'production';
+const port = Number(process.env.PORT || 3000);
+const host = process.env.HOST || '0.0.0.0';
+const app = express();
 
-/* ***********************
- * Routes
- *************************/
-app.use(static)
+// Public assets are served directly; EJS templates remain outside public.
+app.use(express.static(path.join(projectDirectory, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(projectDirectory, 'src/views'));
+app.locals.navigation = navigation;
 
-// Default route: supply data to the index view and shared partials.
-app.get("/", (req, res) => {
-  res.render("index", {
-    title: "Home",
-    studentName: process.env.STUDENT_NAME || "Hate-Uchiha",
-  })
-})
+app.get('/', async (req, res) => {
+  const title = 'Home';
+  res.render('home', { title, currentPath: '/', organizations, projects, categories });
+});
 
-/* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
-const port = Number(process.env.PORT || 5500)
-const host = process.env.HOST || "0.0.0.0"
+app.get('/organizations', async (req, res) => {
+  const title = 'Our Partner Organizations';
+  res.render('organizations', { title, currentPath: '/organizations', organizations });
+});
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-app.listen(port, host, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
+app.get('/projects', async (req, res) => {
+  const title = 'Service Projects';
+  res.render('projects', { title, currentPath: '/projects', projects });
+});
+
+app.get('/categories', async (req, res) => {
+  const title = 'Service Project Categories';
+  res.render('categories', { title, currentPath: '/categories', categories });
+});
+
+const server = app.listen(port, host);
+await once(server, 'listening');
+console.log(`Server is running at http://${host}:${port}`);
+console.log(`Environment: ${nodeEnvironment}`);
