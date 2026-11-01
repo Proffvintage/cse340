@@ -1,0 +1,152 @@
+{
+  "baseUrl": "https://hate-uchiha-cse340.onrender.com",
+  "stage": "live",
+  "keyboardNavigation": "passed",
+  "linkNavigation": "passed",
+  "results": [
+    {
+      "route": "/",
+      "viewport": 320,
+      "title": "Home | CSE 340 Service Network",
+      "width": 320,
+      "scrollWidth": 320,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/organizations",
+      "viewport": 320,
+      "title": "Our Partner Organizations | CSE 340 Service Network",
+      "width": 320,
+      "scrollWidth": 320,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/organizations",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/projects",
+      "viewport": 320,
+      "title": "Service Projects | CSE 340 Service Network",
+      "width": 320,
+      "scrollWidth": 320,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/projects",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/categories",
+      "viewport": 320,
+      "title": "Service Project Categories | CSE 340 Service Network",
+      "width": 320,
+      "scrollWidth": 320,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/categories",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/",
+      "viewport": 390,
+      "title": "Home | CSE 340 Service Network",
+      "width": 390,
+      "scrollWidth": 390,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/organizations",
+      "viewport": 390,
+      "title": "Our Partner Organizations | CSE 340 Service Network",
+      "width": 390,
+      "scrollWidth": 390,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/organizations",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/projects",
+      "viewport": 390,
+      "title": "Service Projects | CSE 340 Service Network",
+      "width": 390,
+      "scrollWidth": 390,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/projects",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/categories",
+      "viewport": 390,
+      "title": "Service Project Categories | CSE 340 Service Network",
+      "width": 390,
+      "scrollWidth": 390,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/categories",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/",
+      "viewport": 1440,
+      "title": "Home | CSE 340 Service Network",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/organizations",
+      "viewport": 1440,
+      "title": "Our Partner Organizations | CSE 340 Service Network",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/organizations",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/projects",
+      "viewport": 1440,
+      "title": "Service Projects | CSE 340 Service Network",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/projects",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    },
+    {
+      "route": "/categories",
+      "viewport": 1440,
+      "title": "Service Project Categories | CSE 340 Service Network",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "imageFailures": [],
+      "headingCount": 1,
+      "activePath": "/categories",
+      "contrastFailures": [],
+      "navigationTextFailures": []
+    }
+  ]
+}
