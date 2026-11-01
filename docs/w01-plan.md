@@ -21,7 +21,7 @@ The full vehicle storefront is the separate Assignment 1. This learning activity
 | 9 | Create Render account linked to GitHub | Complete; learner confirmed account creation and authorized the CLI. |
 | 10 | Create a free PostgreSQL service | Complete: `cse340-db` is Available on the free plan in Frankfurt; database `cse340_0kyc`, user `cse340`; expires 2026-12-01. |
 | 11 | Create free Node web service in the same region | Created [hate-uchiha-cse340](https://hate-uchiha-cse340.onrender.com), free Node service in Frankfurt with manual deployment. |
-| 12 | Deploy updates and test the public app | Pending live Render URL; run `pnpm verify -- https://YOUR-SERVICE.onrender.com` and review in a browser. |
+| 12 | Deploy updates and test the public app | Complete: initial deployment plus a manual update with cleared build cache; seven HTTP checks pass again and live desktop/mobile screenshots are inspected. |
 
 ## File responsibilities and request flow
 
@@ -50,4 +50,4 @@ The course's `My Account` link is implemented later and returns 404 at this stag
 
 W01 provisions a database and sets `DATABASE_URL`, but the home route does not query it. A successful home page cannot verify database connectivity.
 
-Question 1 remains incomplete until pending steps are verified. No Canvas answer has been submitted.
+All documented W01 learning activity, deployment and verification steps are complete. Question 1 can now be answered Yes. No Canvas answer has been submitted.

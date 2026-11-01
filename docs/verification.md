@@ -19,12 +19,12 @@ Date: 2026-11-01.
 - Render web service URL: https://hate-uchiha-cse340.onrender.com; service created on the free plan in Frankfurt.
 - Render database: `cse340-db` (`dpg-dbjn1sajnfac738gb100-a`), Available on the free plan in Frankfurt; PostgreSQL 18, database `cse340_0kyc`, user `cse340`; expires 2026-12-01.
 - PostgreSQL connection: PASS; read-only `SELECT 1` returned 1 over certificate-verified TLS after allowing the current development public IP.
-- Final deployed commit: pending manual update deployment.
+- Final application deployment: commit `4e1ec9efb0b1c3e8bfe3e86cc69fb5bed2d454f1`, deployment `dep-dbjn4jvb9u1s73eh9hb0`, Live at 2026-11-01 17:10:33 UTC. Later commits record evidence only.
 - First deployment: Live, commit `76779e95ee260a6895c2c930b17fca449602c32c`; all seven HTTP checks pass at the public URL.
-- Manual update deployment and repeat HTTP checks: pending.
-- Post-deployment browser review: pending.
+- Manual update deployment: PASS; pushed the update and deployed the specified commit with cleared build cache. All seven HTTP checks pass again on the live HTTPS URL.
+- Post-deployment browser review: PASS; [live desktop](evidence/live-desktop.png) (1200 × 800) and [live mobile](evidence/live-mobile.png) (390 × 844) screenshots inspected. Layout and content render correctly at both widths.
 
-Question 1 is not yet complete.
+Question 1 is complete: the learner confirmed preparation review; both learning applications are implemented and tested; the Render database and web service are configured; the initial and manual update deployments succeeded; live verification passed.
 
 ## Seven HTTP checks
 
@@ -36,4 +36,4 @@ Question 1 is not yet complete.
 6. `/.env` returns 404.
 7. `/server.js` returns 404.
 
-These checks validate application responses. They do not establish Render deployment, database connectivity, or visual correctness in a browser.
+The HTTP checks validate application responses. Render deployment status, the PostgreSQL read-only connection test and inspected browser screenshots provide the additional deployment, database and visual evidence.
