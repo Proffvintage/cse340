@@ -7,9 +7,12 @@ if (!connectionString) {
   throw new Error('Set DB_URL or DATABASE_URL before starting the application.');
 }
 
+// Render's private dpg-* hostname presents a self-signed certificate.
+// Keep SSL encryption there and verify certificates on external connections.
+const isRenderInternal = /^dpg-[a-z0-9-]+$/.test(new URL(connectionString).hostname);
 const db = new Pool({
   connectionString,
-  ssl: true,
+  ssl: isRenderInternal ? { rejectUnauthorized: false } : true,
   connectionTimeoutMillis: 10000,
   query_timeout: 10000,
 });

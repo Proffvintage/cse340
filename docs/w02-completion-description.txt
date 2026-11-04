@@ -110,6 +110,8 @@ Environmental and Educational.
 
 Created src/models/db.js:
 - Creates one reusable pg connection pool with SSL and query/connection timeouts.
+- Accepts Render's self-signed certificate only for its private dpg-* database
+  hostname; external database connections retain certificate verification.
 - Accepts DB_URL, the lesson's variable name, or the existing DATABASE_URL.
 - Exports the pool as the default export and exports testConnection.
 - Tests connectivity with SELECT NOW().
@@ -255,8 +257,14 @@ Started the local application against that application database and ran npm run
 verify. All four pages, required content, project/date/location counts, assets,
 navigation, anchors, private-file exclusion, and title escaping passed.
 
-GitHub publication and hosted verification are the remaining deployment steps;
-their final results will be recorded here after deployment completes.
+Pushed the W02 application to GitHub. Render's first build succeeded but startup
+failed with DEPTH_ZERO_SELF_SIGNED_CERT on its internal PostgreSQL connection.
+Updated the pool to keep SSL encryption while accepting the self-signed
+certificate specifically on Render's private dpg-* hostname. External database
+connections still verify certificates. This follows the connection lesson's SSL
+troubleshooting guidance with the adjustment restricted to the internal host.
+
+Hosted verification results will be recorded below after redeployment completes.
 
 10. RUBRIC AND SUBMISSION
 
