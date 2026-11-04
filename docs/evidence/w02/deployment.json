@@ -1,0 +1,22 @@
+{
+  "site": "https://hate-uchiha-cse340.onrender.com",
+  "repository": "https://github.com/Proffvintage/cse340",
+  "serviceId": "srv-dbjn2hnb9u1s73eh48cg",
+  "deploymentId": "dep-dblh9pnf3r2c73a5aggg",
+  "applicationCommit": "647642454224c4e7dbbe208870fc707fe477c76a",
+  "status": "live",
+  "finishedAt": "2026-11-04T11:20:44.319996Z",
+  "databaseSeedCounts": {
+    "organizations": 3,
+    "projects": 15,
+    "categories": 4,
+    "projectCategoryLinks": 24
+  },
+  "verification": {
+    "disposablePostgresIntegration": "passed",
+    "initializedDatabaseLocalHttp": "passed",
+    "hostedHttp": "passed",
+    "hostedBrowserDesktopAndMobile": "passed",
+    "browserEvidence": "browser-results.json"
+  }
+}

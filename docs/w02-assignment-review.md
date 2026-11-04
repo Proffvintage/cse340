@@ -11,3 +11,5 @@ Course source: [W02 assignment](https://byui-cse.github.io/cse340-ww-course-v2/w
 `npm run verify:w02` passed against a disposable PostgreSQL schema. It verifies real setup SQL, seed counts, foreign keys, duplicate prevention, many-to-many links, model-to-EJS responses, new records, escaped content, query failure/recovery, empty results, static assets, navigation and HTTP status codes. The schema is removed afterward.
 
 See [the full description](w02-completion-description.txt) for deployment results and all work performed. The rubric's final score is assigned by the instructor.
+
+The initialized course database and live site also passed `npm run verify`. Render deployment `dep-dblh9pnf3r2c73a5aggg` is Live at application commit `647642454224c4e7dbbe208870fc707fe477c76a`. Chromium checks passed on all four pages at desktop and mobile widths, including record counts, loaded images, navigation, and absence of horizontal overflow. Evidence is in `docs/evidence/w02`.

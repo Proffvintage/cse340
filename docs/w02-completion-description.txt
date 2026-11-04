@@ -264,7 +264,38 @@ certificate specifically on Render's private dpg-* hostname. External database
 connections still verify certificates. This follows the connection lesson's SSL
 troubleshooting guidance with the adjustment restricted to the internal host.
 
-Hosted verification results will be recorded below after redeployment completes.
+Redeployed successfully to the existing Render service. The live application
+commit is 647642454224c4e7dbbe208870fc707fe477c76a, and the successful deployment
+is dep-dblh9pnf3r2c73a5aggg. Render marked it Live on November 4, 2026.
+
+Ran npm run verify -- https://hate-uchiha-cse340.onrender.com. All four routes,
+database-backed content, project/date/location counts, required sponsor format,
+navigation, anchors, CSS, four PNG images, favicon, 404 responses, private-file
+exclusion, and EJS title escaping passed on the hosted site.
+
+Ran Chromium browser checks for all four pages at desktop (1280 x 900) and
+mobile (390 x 844) sizes. All eight checks passed: correct record counts,
+loaded images, four navigation links, one active link, no JavaScript page
+errors, and no horizontal overflow. Inspected project and category screenshots.
+Browser evidence is stored in docs/evidence/w02/browser-results.json, with
+desktop/mobile project and category PNG screenshots in the same directory.
+Browser tooling and extracted browser libraries were installed under /tmp for
+verification; they are not new application dependencies or system installations.
+
+After work resumed, the development public IP had changed and external database
+connections were rejected by the existing networking allowlist. Added the
+current development address as a single /32 entry while retaining the previous
+entry. Hosted internal database connectivity remained functional throughout.
+
+The full local integration test passed earlier in this task. Additional final
+reruns after the network/IP change could reach PostgreSQL and validate the
+schema, but also encountered intermittent external connection timeouts. The
+database is Available and both development /32 entries are confirmed. All
+hosted application and desktop/mobile checks passed; external local execution
+still depends on a stable connection to the Render database.
+
+Final deployment and verification metadata is in docs/evidence/w02/deployment.json.
+The completed description and rubric evidence are published with the repository.
 
 10. RUBRIC AND SUBMISSION
 
