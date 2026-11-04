@@ -120,6 +120,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .category-tag:hover { text-decoration: underline; text-underline-offset: 3px; }
 .project-content h3 { margin-top: 14px; font-size: 1.55rem; font-weight: 600; }
 .project-content p { max-width: 540px; margin-top: 10px; color: var(--muted); font-size: 0.91rem; }
+.organization-description { margin-block: 12px 18px; color: var(--muted); font-size: 0.91rem; }
 .project-category-link { white-space: nowrap; }
 
 .category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }

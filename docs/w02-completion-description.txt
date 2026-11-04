@@ -1,0 +1,277 @@
+W02 ASSIGNMENT: DATABASE RETRIEVAL — FULL WORK DESCRIPTION
+Project: CSE 340 Service Network
+Date: November 4, 2026
+Repository: https://github.com/Proffvintage/cse340
+Hosted site: https://hate-uchiha-cse340.onrender.com
+
+1. REQUIREMENTS AND STARTING POINT
+
+The byui-cse340-review skill was used to inspect the existing project and the
+current official version 2 course requirements. The original project implemented
+W01 using static arrays of three organizations, three projects, and four
+categories. The PostgreSQL database was available but its public schema had no
+tables. Existing styling, image assets, navigation, and shared EJS partials were
+retained while the directory data was moved into PostgreSQL.
+
+The assignment requires organizations, projects, and categories to flow from
+PostgreSQL through Node.js into EJS. The team activity additionally requires
+five projects per organization and a display of Date: Project Title
+(Organization Name). Categories require a many-to-many project relationship.
+
+Official sources consulted:
+https://byui-cse.github.io/cse340-ww-course-v2/week02/assignment.html
+https://byui-cse.github.io/cse340-ww-course-v2/week02/team-activity.html
+https://byui-cse.github.io/cse340-ww-course-v2/week02/prepare-create-tables.html
+https://byui-cse.github.io/cse340-ww-course-v2/week02/prepare-node-connect-db.html
+https://byui-cse.github.io/cse340-ww-course-v2/week02/prepare-ejs-display-results.html
+
+2. DATABASE DESIGN AND RECREATION SCRIPT
+
+Created src/setup.sql with a BEGIN/COMMIT transaction, all table definitions,
+relationship indexes, and INSERT statements. It is a one-time setup script for
+an empty application schema. It does not delete existing tables or run on
+application startup. A transaction prevents partially completed initialization.
+
+organization table:
+- organization_id: SERIAL PRIMARY KEY.
+- name: VARCHAR(150) NOT NULL.
+- description: TEXT NOT NULL.
+- contact_email: VARCHAR(255) NOT NULL.
+- logo_filename: VARCHAR(255) NOT NULL.
+
+project table:
+- project_id: SERIAL PRIMARY KEY.
+- organization_id: INTEGER NOT NULL, foreign key to organization.organization_id.
+- title: VARCHAR(150) NOT NULL.
+- description: TEXT NOT NULL.
+- location: VARCHAR(255) NOT NULL.
+- date: DATE NOT NULL.
+- An index on organization_id supports sponsor joins.
+
+category table:
+- category_id: SERIAL PRIMARY KEY.
+- name: VARCHAR(150) NOT NULL UNIQUE.
+
+project_category table:
+- project_id: foreign key to project.project_id, NOT NULL.
+- category_id: foreign key to category.category_id, NOT NULL.
+- PRIMARY KEY (project_id, category_id) prevents duplicate associations.
+- ON DELETE CASCADE removes links when their project or category is deleted.
+- An index on category_id supports lookups from categories to projects.
+
+One organization can sponsor many projects. Each project has exactly one
+sponsor through its required organization_id. Many-to-many membership is
+represented by project_category, so a project can have several categories and a
+category can contain several projects. All seeded projects have categories and
+all seeded categories have projects. Future inserts must also create category
+links when adding projects; a foreign key alone does not require a parent
+record to have at least one junction row.
+
+3. ORGANIZATIONS AND SAMPLE PROJECTS
+
+Inserted the three official organizations with their full descriptions, contact
+emails, and existing logo filenames. BrightFuture's address was updated to the
+W02 lesson value, info@brightfuturebuilders.org. The other addresses are
+contact@greenharvest.org and hello@unityserve.org.
+
+Inserted 15 sample projects, five per organization:
+
+BrightFuture Builders:
+- Park Cleanup: November 14, 2026; Riverside Park, Rexburg.
+- Community Playground Repair: November 21, 2026; Central Playground, Rexburg.
+- Accessible Ramp Build: November 28, 2026; Community Center, Rexburg.
+- Neighborhood Beautification: December 5, 2026; Main Street, Rexburg.
+- Winter Shelter Preparation: December 12, 2026; Hope Shelter, Rexburg.
+
+GreenHarvest Growers:
+- Community Garden Planting: November 15, 2026; GreenHarvest Garden, Rexburg.
+- Food Drive: November 22, 2026; GreenHarvest Food Hub, Rexburg.
+- Composting Workshop: November 29, 2026; GreenHarvest Learning Center, Rexburg.
+- School Garden Lessons: December 6, 2026; Lincoln School Garden, Rexburg.
+- Healthy Harvest Distribution: December 13, 2026; Farmers Market Hall, Rexburg.
+
+UnityServe Volunteers:
+- Community Tutoring: November 16, 2026; Public Library, Rexburg.
+- Senior Companion Visits: November 23, 2026; Senior Center, Rexburg.
+- Charity Supply Sorting: November 30, 2026; UnityServe Donation Center, Rexburg.
+- Community Wellness Walk: December 7, 2026; Nature Trail, Rexburg.
+- Volunteer Skills Workshop: December 14, 2026; UnityServe Meeting Hall, Rexburg.
+
+All project records include descriptions. These dates, locations, and additional
+events are demonstration data for the assignment, not verified public events.
+
+Inserted four categories: Environmental, Educational, Community Service, and
+Health and Wellness. Added 24 project/category links. Every project has one or
+two categories, and every category is used. For example, Park Cleanup belongs
+to Environmental and Community Service; Composting Workshop belongs to
+Environmental and Educational.
+
+4. NODE.JS MODEL FILES AND DATABASE CONNECTION
+
+Created src/models/db.js:
+- Creates one reusable pg connection pool with SSL and query/connection timeouts.
+- Accepts DB_URL, the lesson's variable name, or the existing DATABASE_URL.
+- Exports the pool as the default export and exports testConnection.
+- Tests connectivity with SELECT NOW().
+- Supports development query timing and row-count logging when
+  ENABLE_SQL_LOGGING=true. It does not log database credentials.
+- Reports idle connection failures and permits orderly pool shutdown.
+
+Created src/models/organizations.js:
+- Exports getAllOrganizations as an asynchronous arrow function.
+- Selects organization_id, name, description, contact_email, and logo_filename.
+- Orders by organization_id and returns result.rows.
+
+Created src/models/projects.js:
+- Exports getAllProjects as an asynchronous arrow function.
+- Joins project to organization to retrieve organization_name.
+- Retrieves IDs, title, description, location, and date.
+- Returns dates as YYYY-MM-DD strings to preserve the calendar date.
+- Orders projects by date and project_id, and returns result.rows.
+
+Created src/models/categories.js:
+- Exports getAllCategories as an asynchronous arrow function.
+- Selects category_id and name, orders by category_id, and returns result.rows.
+
+Queries explicitly select columns. Database failures are allowed to reject so
+route handlers can handle them consistently. Data access stays in the dedicated
+model files, following the exact file/function names used in the lessons.
+
+5. EXPRESS ROUTES AND ERROR BEHAVIOR
+
+Updated server.js to import and await the model functions inside /organizations,
+/projects, and /categories. Each handler passes its results to the matching EJS
+view together with its title and navigation state. The home page retrieves all
+three collections concurrently and uses the results for partner links, category
+previews, and the next three project previews.
+
+Removed the static directory arrays from src/data/site.js; only navigation
+remains there. Database data is fetched on each page request rather than copied
+into a hardcoded application array.
+
+Added try/catch and next(error) to asynchronous routes because this project uses
+Express 4. Added a shared src/views/error.ejs page. Query failures return HTTP
+500 with a useful message and without SQL or credentials. Missing routes return
+HTTP 404. Successful empty queries remain HTTP 200 and directory pages show an
+empty-state message. The connection is tested before the server begins listening.
+SIGINT and SIGTERM close the HTTP server and database pool.
+
+Request flow:
+Browser -> Express route -> await model -> pg/PostgreSQL -> result.rows ->
+res.render -> EJS and shared partials -> HTML response -> browser.
+
+6. EJS VIEWS AND PRESENTATION
+
+src/views/organizations.ejs:
+- Displays every organization's name, full description, contact email and logo.
+- Builds image URLs from logo_filename retrieved from the database.
+- Uses organization IDs for stable home-page and sponsor anchor destinations.
+
+src/views/projects.ejs:
+- Displays all 15 projects rather than the previous three static entries.
+- Uses the required format: formatted Date: Project Title (Organization Name).
+- Displays the joined sponsor in italics, description, and location.
+- Includes semantic time elements and links to each sponsor's organization card.
+- Formats dates in UTC to avoid changing the displayed day between time zones.
+
+src/views/categories.ejs:
+- Displays category names from PostgreSQL.
+- Does not display category-specific project lists, as W02 does not require them.
+- Uses the existing card styling with a repeating presentation color palette.
+- Removes hardcoded category descriptions and the fixed 'four areas' count.
+
+src/views/home.ejs:
+- Uses actual organization IDs and database-selected logos.
+- Uses actual category IDs/names and project IDs/titles/sponsor names.
+- Limits the project preview to the first three upcoming sample records.
+
+All dynamic database content uses escaped <%= ... %> output. Raw <%- ... %>
+output is reserved for trusted header/footer includes. Added a small CSS rule
+to keep organization descriptions consistent with the existing design.
+
+7. SETUP, CONFIGURATION, AND DOCUMENTATION
+
+Updated .env.sample to document DB_URL and ENABLE_SQL_LOGGING. Real credentials
+remain in ignored local configuration and Render settings.
+
+Added scripts/setup-db.js and npm run db:setup. This reads src/setup.sql and
+refuses to run when any W02 application table already exists. It is intended
+for initial setup or recreating a new database, not repeated seeding.
+
+Updated package.json to describe W02 and add db:setup and verify:w02 scripts.
+No new application dependencies or frameworks were added.
+
+Updated README.md with database configuration, setup/recreation instructions,
+page behavior, verification commands, and links to W02 evidence. Added
+docs/w02-assignment-review.md to map the implementation to the supplied rubric.
+Created this text file as the full description requested by the learner.
+Existing W01 coaching files and evidence were preserved.
+
+8. VERIFICATION PERFORMED
+
+Updated scripts/verify.js to check the W02 organization email/descriptions,
+all 15 project cards, all dates and locations, and the required project heading
+format. Existing checks cover all four routes, titles, partials, navigation,
+anchor destinations, CSS, images, favicon, 404 responses, source-file exclusion,
+and escaped title output.
+
+Added scripts/verify-w02.js and npm run verify:w02. It connects to real
+PostgreSQL, creates a unique disposable schema, executes the complete setup
+script there, and starts the actual Express application against that schema.
+Application tables and records are not used for test writes.
+
+Passed checks:
+- Exactly three organizations, 15 projects, four categories, and 24 links.
+- At least five projects for every organization.
+- A category link for every project and projects for every category.
+- Projects can belong to multiple categories.
+- Duplicate links and category names are rejected.
+- Missing required category names are rejected.
+- Invalid project/category/sponsor foreign keys are rejected.
+- Deleting a sponsor with existing projects is rejected.
+- Seeded database content renders through models, routes, and EJS.
+- Newly inserted organizations, projects, and categories appear on new requests.
+- Script-like database text is escaped in all four pages.
+- Newly inserted dates and locations render correctly.
+- A deliberate database query failure returns HTTP 500 with a generic message.
+- The application recovers after the query problem is corrected.
+- Empty query results render successfully with appropriate directory messages.
+- Deleting projects cleans up their category junction rows.
+- Assets, navigation, titles, private-file exclusion, and HTTP status checks pass.
+
+All disposable test records and the test schema were removed after verification.
+JavaScript syntax checks and git diff whitespace checks are also performed.
+
+9. APPLICATION DATABASE AND DEPLOYMENT
+
+The learner explicitly authorized updating the existing course database,
+pushing to GitHub, and deploying the existing Render web service.
+
+Applied src/setup.sql to the existing empty course database using npm run
+db:setup. The setup completed successfully and inserted three organizations,
+15 projects, four categories, and 24 project/category links.
+
+Started the local application against that application database and ran npm run
+verify. All four pages, required content, project/date/location counts, assets,
+navigation, anchors, private-file exclusion, and title escaping passed.
+
+GitHub publication and hosted verification are the remaining deployment steps;
+their final results will be recorded here after deployment completes.
+
+10. RUBRIC AND SUBMISSION
+
+Database Design: all required entities and relationships are implemented in
+src/setup.sql, including the many-to-many junction table and complete seeds.
+
+End-to-End Data Flow: organizations, projects and categories are retrieved from
+PostgreSQL and rendered dynamically. Required fields and sponsor/date formatting
+are present. Tests confirm that new database data changes subsequent responses.
+
+Code Organization and Standards: database work is in src/models, exact required
+getAll... names are used, and ESM/async arrow functions match the project and
+learning activities. Queries use explicit columns, EJS escapes data, and errors
+are handled through Express middleware.
+
+The implementation targets the Complete level on all three rubric rows. The
+instructor determines the final score. Canvas submission remains the learner's
+step: submit the GitHub repository URL and hosted Render URL listed above.

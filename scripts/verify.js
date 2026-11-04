@@ -8,7 +8,7 @@ const verifySite = async () => {
   const baseUrl = new URL(process.argv.slice(2).find((argument) => argument !== '--') || `http://127.0.0.1:${process.env.PORT || 3000}`);
   const pageSpecs = [
     { path: '/', title: 'Home', content: ['Welcome to the', 'CSE 340', 'Service Network!'] },
-    { path: '/organizations', title: 'Our Partner Organizations', content: ['BrightFuture Builders', 'GreenHarvest Growers', 'UnityServe Volunteers', 'info@brightfuture.org', 'contact@greenharvest.org', 'hello@unityserve.org'] },
+    { path: '/organizations', title: 'Our Partner Organizations', content: ['BrightFuture Builders', 'GreenHarvest Growers', 'UnityServe Volunteers', 'info@brightfuturebuilders.org', 'contact@greenharvest.org', 'hello@unityserve.org', 'A nonprofit focused on improving community infrastructure', 'An urban farming collective', 'A volunteer coordination group'] },
     { path: '/projects', title: 'Service Projects', content: ['Park Cleanup', 'Food Drive', 'Community Tutoring', 'Join us to clean up local parks and make them beautiful!', 'Help collect and distribute food to those in need.', 'Volunteer to tutor students in various subjects.'] },
     { path: '/categories', title: 'Service Project Categories', content: ['Environmental', 'Educational', 'Community Service', 'Health and Wellness'] },
   ];
@@ -34,6 +34,12 @@ const verifySite = async () => {
     for (const target of pageSpecs) assert.ok(mainNavigation.includes(`href="${target.path}"`), `${spec.path}: link to ${target.path}`);
     assert.equal((mainNavigation.match(/aria-current="page"/g) || []).length, 1, `${spec.path}: one active navigation link`);
     for (const expected of spec.content) assert.ok(html.includes(expected), `${spec.path}: ${expected}`);
+    if (spec.path === '/projects') {
+      assert.equal((html.match(/class="project-card"/g) || []).length, 15, 'All 15 seeded projects render');
+      assert.equal((html.match(/<time datetime=/g) || []).length, 15, 'Each project renders its date');
+      assert.equal((html.match(/<strong>Location:<\/strong>/g) || []).length, 15, 'Each project renders its location');
+      assert.ok(html.includes('November 14, 2026</time>: Park Cleanup (<em>BrightFuture Builders</em>)'), 'Required Date: Title (Organization) format');
+    }
     assert.ok(!html.includes('<%'), `${spec.path}: all EJS rendered`);
     for (const image of html.matchAll(/<img[^>]+src="([^"<>]+)"/g)) imagePaths.add(image[1]);
     console.log(`PASS ${spec.path}: content, title, navigation, shared partials`);

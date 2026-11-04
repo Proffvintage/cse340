@@ -1,7 +1,7 @@
 {
   "name": "cse340",
   "version": "1.0.0",
-  "description": "CSE 340 Service Network \u2014 W01 Initial Site Creation",
+  "description": "CSE 340 Service Network \u2014 W02 Database Retrieval",
   "main": "server.js",
   "engines": {
     "node": "22.x"
@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node server.js",
-    "verify": "node --env-file-if-exists=.env scripts/verify.js"
+    "verify": "node --env-file-if-exists=.env scripts/verify.js",
+    "verify:w02": "node --env-file-if-exists=.env scripts/verify-w02.js",
+    "db:setup": "node --env-file-if-exists=.env scripts/setup-db.js"
   },
   "author": "Hate-Uchiha",
   "license": "ISC",
