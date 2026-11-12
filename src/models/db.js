@@ -9,10 +9,12 @@ if (!connectionString) {
 
 // Render's private dpg-* hostname presents a self-signed certificate.
 // Keep SSL encryption there and verify certificates on external connections.
-const isRenderInternal = /^dpg-[a-z0-9-]+$/.test(new URL(connectionString).hostname);
+const databaseHostname = new URL(connectionString).hostname;
+const isLocalDatabase = ['localhost', '127.0.0.1', '::1'].includes(databaseHostname);
+const isRenderInternal = /^dpg-[a-z0-9-]+$/.test(databaseHostname);
 const db = new Pool({
   connectionString,
-  ssl: isRenderInternal ? { rejectUnauthorized: false } : true,
+  ssl: isLocalDatabase ? false : (isRenderInternal ? { rejectUnauthorized: false } : true),
   connectionTimeoutMillis: 10000,
   query_timeout: 10000,
 });
