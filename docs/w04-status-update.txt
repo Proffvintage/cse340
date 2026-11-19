@@ -1,0 +1,11 @@
+W04 60-SECOND STATUS UPDATE DRAFT
+Student: Markson
+Course source: https://byui-cse.github.io/cse340-ww-course-v2/week04/ponder.html
+
+AI-assisted draft based on the implementation and test evidence. It is not a record of Markson's personal experience; review its first-person statements before submission. No Canvas submission has been made.
+
+This week's project connects HTML forms to database inserts and updates through MVC. One positive outcome is that the application now gives useful feedback after a redirect without repeating the write on refresh. The update forms also preserve the existing record, and server validation prevents invalid data from changing the database even when browser checks are bypassed.
+
+A challenging technical issue was replacing a project's category assignments safely. Deleting the old links and inserting new ones must happen in one transaction, otherwise a failed insert could leave the project partly changed. Local tests verified rollback and concurrent updates. Another issue was reconciling the lesson's 200-character title validator with the older 150-character database column.
+
+Next week I would like to trace each change from request to database response and continue defining failure cases before implementation. Before this week's work is ready to submit, I still need to review and understand the AI-assisted code, complete my real coaching conversation and required course participation, and verify the authorized deployment. A useful instructor clarification would be the differing browser and server maximum lengths in the project examples.

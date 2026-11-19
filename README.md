@@ -1,6 +1,6 @@
 # CSE 340 Service Network
 
-W03 Model-View-Controller implementation, following the [v2 assignment](https://byui-cse.github.io/cse340-ww-course-v2/week03/assignment.html) and its learning/team activities.
+W04 Inserting and Updating Data, following the [Service Network v2 assignment](https://byui-cse.github.io/cse340-ww-course-v2/week04/assignment.html) and all six learning activities. Week 4 is verified locally and deployed to the live site below.
 
 Live site: <https://hate-uchiha-cse340.onrender.com>
 
@@ -8,7 +8,7 @@ Repository: <https://github.com/Proffvintage/cse340>
 
 ## Run locally
 
-Use Node 22. On a fresh checkout, copy `.env.sample` to `.env` and set `DB_URL` to your Render External Database URL. The existing `DATABASE_URL` name also works. Keep `.env` out of Git.
+Use Node 22. On a fresh checkout, copy `.env.sample` to `.env` and set `DB_URL` to the intended application database. The existing `DATABASE_URL` name also works. Keep `.env` out of Git. Set `SESSION_SECRET` to a private random value of at least 32 characters. Development and tests generate an ephemeral secret when it is absent; production requires a configured secret.
 
 ```bash
 npm install
@@ -19,9 +19,9 @@ npm run dev
 
 Open <http://127.0.0.1:3000>. In another terminal, run `npm run verify`. The existing course database has already been initialized; do not run setup again against it.
 
-Run `npm run verify:w03` for MVC, detail-page, relationship, escaping, and error-handling integration checks. Run `npm run verify:w02` for the earlier schema and database-retrieval regression suite. Both create and remove a disposable schema; application records are unaffected. They require database connectivity and permission to create a schema.
+Run `npm run verify:w04` with `DB_URL` pointing to a disposable local PostgreSQL database. It refuses nonlocal database hosts and verifies create/edit forms, 349 rejected submissions, one-time session feedback, escaped sticky values, targeted writes, and transactional category replacement. `npm run verify:w03` covers the earlier MVC behavior. Both create and remove unique test schemas. Never run database verification against the hosted course database. The older `verify:w02` suite currently contains a stale expectation that the November 14, 2026 Park Cleanup remains upcoming.
 
-Production runs with `npm start`. Render supplies the port and production environment variables, including the Internal Database URL in `DATABASE_URL` or `DB_URL`. Database setup is a separate operation and never runs on server startup.
+Production runs with `npm start`. Render supplies the port and production database URL. Production also requires the private `SESSION_SECRET`, uses HTTPS session cookies, and trusts the hosting proxy. Database setup and migrations never run on startup. `database/w04-project-title.sql` expanded the hosted title column to 200 characters on November 16, 2026 while preserving seeded records. Do not rerun seed setup against an initialized database.
 
 ## Pages
 
@@ -30,11 +30,22 @@ Production runs with `npm start`. Render supplies the port and production enviro
 - `/projects` and `/project/:id`: the next five projects and individual details with partner and category links.
 - `/categories` and `/category/:id`: category lists and individual categories with linked projects.
 - `/test-error`: the intentional Week 3 server-error route used to verify the custom 500 response.
+- `/new-organization`, `/new-project`, and `/new-category`: validated create forms, available from each directory page.
+- `/edit-organization/:id`, `/edit-project/:id`, and `/edit-category/:id`: prepopulated update forms, available from each detail page.
+- `/assign-categories/:projectId`: category checkboxes; `/project/:projectId/assign-categories` is an equivalent route supported because the lesson names both.
 
-The organizations and public images come from the official learning activities. Project dates, locations and additional events are sample data. Every project has a sponsor and at least one category; several have two categories.
+The organizations and public images come from the official learning activities. Project dates, locations and additional events are sample data. Each seeded project has a sponsor and at least one category. New projects can have categories assigned afterward; clearing every checkbox intentionally removes their category links.
 
 ## Implementation and verification
 
+- [W04 completion summary](docs/w04-completion-summary.md)
+- [W04 rubric evidence and lesson discrepancies](docs/w04-assignment-review.md)
+- [W04 team activity discussion responses](docs/w04-team-activity.md)
+- [W04 coaching rehearsal, not an actual session](docs/w04-coaching-transcript.txt)
+- [W04 original coaching prompt](docs/w04-coaching-prompt.txt)
+- [W04 status update draft](docs/w04-status-update.txt)
+- [W04 deployment and submission checklist](docs/w04-submission-checklist.md)
+- [W04 hosted deployment evidence](docs/evidence/w04/deployment.json)
 - [W03 completion summary](docs/w03-completion-summary.md)
 - [W03 rubric evidence](docs/w03-assignment-review.md)
 - [W03 team activity notes](docs/w03-team-activity.md)
@@ -44,6 +55,8 @@ The organizations and public images come from the official learning activities. 
 - [W01 rubric evidence](docs/assignment-review.md)
 - [Code and request-flow guide](docs/code-guide.md)
 - [Render configuration](docs/render-setup.md)
+- [W01 coaching questions and model answers](docs/w01-coaching-answers.md)
+- [Detailed W01 coaching review guide](docs/w01-coaching-review-guide.md)
 
 The router is in `src/routes.js`; request coordination is in `src/controllers`; SQL is in `src/models`; and EJS presentation is in `src/views`. All pages share the header and footer in `src/views/partials`. The stylesheet is `public/css/main.css`. JavaScript uses ESM imports/exports, arrow functions, and async/await. `<%- %>` is used only for trusted partial includes; template data uses `<%= %>`.
 
