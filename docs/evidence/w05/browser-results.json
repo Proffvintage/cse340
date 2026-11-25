@@ -1,0 +1,9 @@
+{
+  "student": "Markson",
+  "browser": "Chrome headless",
+  "registration": "passed",
+  "login": "passed",
+  "regularAuthorization": "passed",
+  "logout": "passed",
+  "mobileOverflow": false
+}

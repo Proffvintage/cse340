@@ -1,6 +1,6 @@
 # CSE 340 Service Network
 
-W04 Inserting and Updating Data, following the [Service Network v2 assignment](https://byui-cse.github.io/cse340-ww-course-v2/week04/assignment.html) and all six learning activities. Week 4 is verified locally and deployed to the live site below.
+W05 Authentication and Authorization, following the [Service Network v2 assignment](https://byui-cse.github.io/cse340-ww-course-v2/week05/assignment.html) and its learning/team activities. Week 5 is verified locally; the live site below remains on the committed Week 4 release until deployment is authorized.
 
 Live site: <https://hate-uchiha-cse340.onrender.com>
 
@@ -19,7 +19,7 @@ npm run dev
 
 Open <http://127.0.0.1:3000>. In another terminal, run `npm run verify`. The existing course database has already been initialized; do not run setup again against it.
 
-Run `npm run verify:w04` with `DB_URL` pointing to a disposable local PostgreSQL database. It refuses nonlocal database hosts and verifies create/edit forms, 349 rejected submissions, one-time session feedback, escaped sticky values, targeted writes, and transactional category replacement. `npm run verify:w03` covers the earlier MVC behavior. Both create and remove unique test schemas. Never run database verification against the hosted course database. The older `verify:w02` suite currently contains a stale expectation that the November 14, 2026 Park Cleanup remains upcoming.
+Run `npm run verify:w05` with `DB_URL` pointing to a disposable loopback PostgreSQL database. It verifies registration, bcrypt hashes, login/logout, session rotation, guest/regular/admin access, hidden links, direct POST protection, users-page privacy, and database failures. `npm run verify:w04` and `npm run verify:w03` remain regression suites. Never use the hosted course database for these write-heavy checks. The older W02 suite contains a stale fixed-date upcoming-project expectation.
 
 Production runs with `npm start`. Render supplies the port and production database URL. Production also requires the private `SESSION_SECRET`, uses HTTPS session cookies, and trusts the hosting proxy. Database setup and migrations never run on startup. `database/w04-project-title.sql` expanded the hosted title column to 200 characters on November 16, 2026 while preserving seeded records. Do not rerun seed setup against an initialized database.
 
@@ -38,6 +38,13 @@ The organizations and public images come from the official learning activities. 
 
 ## Implementation and verification
 
+- [W05 completion summary](docs/w05-completion-summary.md)
+- [W05 rubric evidence](docs/w05-assignment-review.md)
+- [W05 team activity responses](docs/w05-team-activity.md)
+- [W05 coaching rehearsal, not an actual session](docs/w05-coaching-transcript.txt)
+- [W05 original coaching prompt](docs/w05-coaching-prompt.txt)
+- [W05 status update draft](docs/w05-status-update.txt)
+- [W05 submission checklist](docs/w05-submission-checklist.md)
 - [W04 completion summary](docs/w04-completion-summary.md)
 - [W04 rubric evidence and lesson discrepancies](docs/w04-assignment-review.md)
 - [W04 team activity discussion responses](docs/w04-team-activity.md)
